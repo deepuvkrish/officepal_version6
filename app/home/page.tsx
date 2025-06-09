@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { Button } from "@/app/components/ui/Button";
-import AnimatedBackground from "./components/ui/AnimatedBackground";
+import AnimatedBackground from "@/app/components/ui/AnimatedBackground";
 import Image from "next/image";
-import SignIn from "@/app/components/SignIn";
+import { SignOut } from "../components/SignOut";
 
 export default function Home() {
   return (
@@ -32,7 +32,8 @@ export default function Home() {
             Start Building Resume
           </Button>
         </Link>
-        <SignIn />
+
+        <SignOut />
       </div>
     </main>
   );

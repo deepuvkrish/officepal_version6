@@ -1,43 +1,65 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
-  LogIn,
   LogOut,
   Settings,
   FileText,
   CreditCard,
   Menu,
   X,
+  ChevronDown,
 } from "lucide-react";
+import { useSession, signOut } from "next-auth/react";
+import SignIn from "@/app/components/SignIn";
 
-export default function Navbar({
-  isLoggedIn = false,
-}: {
-  isLoggedIn?: boolean;
-}) {
+export default function Navbar() {
+  const { data: session } = useSession();
+  const isLoggedIn = !!session;
   const [showMenu, setShowMenu] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showSticky, setShowSticky] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
+  // Sticky on scroll down
   useEffect(() => {
     let lastScroll = 0;
-
     const handleScroll = () => {
       const currentScroll = window.scrollY;
       setShowSticky(currentScroll > lastScroll && currentScroll > 50);
       lastScroll = currentScroll;
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const avatar = (
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setShowMenu(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const avatar = session?.user?.image ? (
+    <Image
+      src={session.user.image}
+      alt="avatar"
+      width={32}
+      height={32}
+      className="rounded-full object-cover"
+    />
+  ) : (
     <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-sm font-medium text-white">
-      DK {/* Replace with user initials or image */}
+      {session?.user?.name?.[0] ?? "U"}
     </div>
   );
 
@@ -63,43 +85,58 @@ export default function Navbar({
         {/* Desktop Navigation */}
         <div className="hidden sm:flex items-center gap-4">
           {isLoggedIn ? (
-            <div className="relative">
+            <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setShowMenu(!showMenu)}
                 className="flex items-center gap-2 hover:bg-gray-200 dark:hover:bg-gray-700 p-2 rounded-md"
               >
                 {avatar}
-                <span className="hidden sm:inline">My Account</span>
+                <span className="hidden sm:inline text-sm">
+                  {session?.user?.name?.split(" ")[0] ?? "My Account"}
+                </span>
+                <ChevronDown />
               </button>
-              {showMenu && (
-                <div className="absolute right-0 mt-2 bg-white dark:bg-gray-900 shadow-lg rounded-md w-48 py-2 border dark:border-gray-800">
-                  <Link href="/resumes/saved" className="dropdown-item">
-                    <FileText className="w-4 h-4 mr-2" />
-                    Saved Resumes
-                  </Link>
-                  <Link href="/account/settings" className="dropdown-item">
-                    <Settings className="w-4 h-4 mr-2" />
-                    Edit Details
-                  </Link>
-                  <Link href="/pricing" className="dropdown-item">
-                    <CreditCard className="w-4 h-4 mr-2" />
-                    Buy Plans
-                  </Link>
-                  <button className="dropdown-item text-red-500">
-                    <LogOut className="w-4 h-4 mr-2" />
-                    Logout
-                  </button>
-                </div>
-              )}
+
+              <div
+                className={`absolute right-0 mt-2 bg-white dark:bg-gray-900 shadow-lg rounded-md w-48 border dark:border-gray-800 transition-all duration-200 origin-top transform ${
+                  showMenu
+                    ? "scale-100 opacity-100 visible"
+                    : "scale-95 opacity-0 invisible"
+                }`}
+              >
+                <Link
+                  href="/resumes/saved"
+                  className="dropdown-item flex items-center gap-2 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-800"
+                >
+                  <FileText className="w-4 h-4" />
+                  Saved Resumes
+                </Link>
+                <Link
+                  href="/account/settings"
+                  className="dropdown-item flex items-center gap-2 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-800"
+                >
+                  <Settings className="w-4 h-4" />
+                  Edit Details
+                </Link>
+                <Link
+                  href="/pricing"
+                  className="dropdown-item flex items-center gap-2 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-800"
+                >
+                  <CreditCard className="w-4 h-4" />
+                  Buy Plans
+                </Link>
+                <button
+                  onClick={() => signOut()}
+                  className="dropdown-item text-red-500 flex items-center gap-2 px-4 py-2 hover:bg-red-100 dark:hover:bg-red-900 w-full text-left"
+                >
+                  <LogOut className="w-4 h-4" />
+                  Logout
+                </button>
+              </div>
             </div>
           ) : (
             <>
-              <Link href="/signin" className="btn text-sm w-[80px] flex">
-                <LogIn className="w-4 h-4 mr-1" /> Sign In
-              </Link>
-              <Link href="/signup" className="btn-primary text-sm">
-                Sign Up
-              </Link>
+              <SignIn />
             </>
           )}
         </div>
@@ -127,16 +164,16 @@ export default function Navbar({
               <Link href="/pricing" className="dropdown-item">
                 Buy Plans
               </Link>
-              <button className="dropdown-item text-red-500">Logout</button>
+              <button
+                onClick={() => signOut()}
+                className="dropdown-item text-red-500"
+              >
+                Logout
+              </button>
             </>
           ) : (
             <>
-              <Link href="/signin" className="btn w-full text-left">
-                Sign In
-              </Link>
-              <Link href="/signup" className="btn-primary w-full text-left">
-                Sign Up
-              </Link>
+              <SignIn />
             </>
           )}
         </div>
