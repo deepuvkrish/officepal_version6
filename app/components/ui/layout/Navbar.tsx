@@ -74,7 +74,7 @@ export default function Navbar() {
       <div className="max-w-full mx-auto px-6 py-3 flex items-center justify-between">
         <Link href="/" className="flex items-center">
           <Image
-            src="/logo/whtTrans.png"
+            src="/logo/blkTrans.png"
             alt="Resume Icon"
             width={100}
             height={50}

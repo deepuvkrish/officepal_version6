@@ -1,18 +1,19 @@
 import Link from "next/link";
 import { Button } from "@/app/components/ui/Button";
-import AnimatedBackground from "./components/ui/AnimatedBackground";
+// import AnimatedBackground from "./components/ui/AnimatedBackground";
 import Image from "next/image";
-import SignIn from "@/app/components/SignIn";
+// import SignIn from "@/app/components/SignIn";
+import Testimonial from "./components/ui/Testimonial";
 
 export default function Home() {
   return (
     <main className="relative min-h-screen flex flex-col justify-center items-center px-6 py-12 bg-background text-foreground text-center overflow-hidden">
       {/* Background Illustration */}
-      <AnimatedBackground />
+      {/* <AnimatedBackground /> */}
 
       <div className="relative z-10 max-w-xl">
         <Image
-          src="/logo/icon_white.png"
+          src="/logo/icon_black.png"
           alt="Resume Icon"
           width={200}
           height={200}
@@ -32,7 +33,12 @@ export default function Home() {
             Start Building Resume
           </Button>
         </Link>
-        <SignIn />
+        {/* <SignIn /> */}
+      </div>
+
+      <div className="flex flex-col w-full mt-[10rem]">
+        
+        <Testimonial />
       </div>
     </main>
   );
