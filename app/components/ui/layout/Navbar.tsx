@@ -26,12 +26,28 @@ import {
   Gift,
   AudioLines,
   FileVideo,
+  SquareFunction,
+  FilePlus2,
+  FolderCode,
+  BriefcaseBusiness,
+  Hourglass,
 } from "lucide-react";
 import { useSession, signOut } from "next-auth/react";
 import SignIn from "@/app/components/SignIn";
 import LettersDropdown from "@/app/components/ui/layout/LettersDropdown";
 import MeetingDropdown from "./MeetingDropdown";
+import DocumentsDropdown from "./DocumentsDropdown";
 
+const docOptions = [
+  { label: "Function Specification Docs", icon: <SquareFunction size={16} /> },
+  { label: "Functional Requirement Docs", icon: <FilePlus2 size={16} /> },
+  { label: "Software Requirement Specs Docs", icon: <FolderCode size={16} /> },
+  {
+    label: "Business Requirements Docs",
+    icon: <BriefcaseBusiness size={16} />,
+  },
+  { label: "Estimate Docs", icon: <Hourglass size={16} /> },
+];
 const momOptions = [
   { label: "Create MoMs from Audio", icon: <AudioLines size={16} /> },
   { label: "Create MoMs from Videos", icon: <FileVideo size={16} /> },
@@ -64,6 +80,7 @@ export default function Navbar() {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showMobileLetters, setShowMobileLetters] = useState(false);
   const [showMobileMoms, setShowMobileMoms] = useState(false);
+  const [showMobileDocs, setShowMobileDocs] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const avatar = session?.user?.image ? (
@@ -101,9 +118,13 @@ export default function Navbar() {
           />
         </Link>
 
-        <div className="hidden sm:flex flex-row">
+        <div className="hidden sm:flex flex-row items-center">
           <LettersDropdown />
           <MeetingDropdown />
+          <DocumentsDropdown />
+          <button className="flex items-center gap-1 px-4 py-2 hover:text-[#029f74] transition cursor-pointer text-[18px]">
+            FAQs
+          </button>
         </div>
 
         <div className="hidden sm:flex items-center gap-4">
@@ -178,7 +199,14 @@ export default function Navbar() {
         }`}
       >
         <div className="px-6 py-4 flex flex-col gap-3 h-full overflow-y-auto">
-          <div className="flex justify-end mb-2">
+          <div className="flex justify-between items-center mb-2">
+            <Image
+              src="/logo/blkTrans.png"
+              alt="Resume Icon"
+              width={100}
+              height={50}
+              className="block"
+            />
             <button
               onClick={() => setShowMobileMenu(false)}
               className="p-2 text-gray-600 hover:text-black"
@@ -246,6 +274,37 @@ export default function Navbar() {
               ))}
             </div>
           </div>
+
+          {/* Documents Dropdown */}
+          <button
+            onClick={() => setShowMobileDocs(!showMobileDocs)}
+            className="flex justify-between items-center px-3 py-2 text-left border rounded-md"
+          >
+            <span>Documents</span>
+            {showMobileDocs ? <ChevronUp /> : <ChevronRight />}
+          </button>
+
+          <div
+            className={`overflow-hidden transition-all duration-300 ease-in-out ${
+              showMobileDocs ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0"
+            }`}
+          >
+            <div className="pl-4 text-sm flex flex-col gap-1 mt-2">
+              {docOptions.map(({ label, icon }) => (
+                <Link
+                  key={label}
+                  href={`/letters/${label.toLowerCase().replace(/\s+/g, "-")}`}
+                  className="flex items-center gap-2 px-2 py-1 rounded-md hover:bg-gray-100 text-gray-800 transition"
+                  onClick={() => setShowMobileMenu(false)}
+                >
+                  {icon}
+                  {label}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <div className="divider"></div>
 
           {/* Auth Options */}
           {isLoggedIn ? (

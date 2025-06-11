@@ -51,12 +51,12 @@ export default function LettersDropdown() {
           isOpen ? "opacity-100 visible" : "opacity-0 invisible"
         }`}
       >
-        <div className="grid grid-cols-2 gap-1 p-4">
+        <div className="flex flex-row flex-wrap justify-center px-[5rem]">
           {letterOptions.map((option) => (
             <Link
               key={option.href}
               href={option.href}
-              className="block px-3 py-2 rounded-md  hover:text-[#029f74] transition-colors text-[16px] cursor-pointer"
+              className="block px-3 py-2 rounded-md  hover:text-[#029f74] transition-colors text-[16px] cursor-pointer min-w-[300px] my-2"
             >
               {option.label}
             </Link>

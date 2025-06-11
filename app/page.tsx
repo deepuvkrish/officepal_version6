@@ -7,7 +7,7 @@ import Testimonial from "./components/ui/Testimonial";
 
 export default function Home() {
   return (
-    <main className="relative min-h-screen flex flex-col justify-center items-center px-6 py-12 bg-background text-foreground text-center overflow-hidden">
+    <main className="relative min-h-screen flex flex-col justify-center items-center px-6 py-12 bg-feedback text-foreground text-center overflow-hidden">
       {/* Background Illustration */}
       {/* <AnimatedBackground /> */}
 
