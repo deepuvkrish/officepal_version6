@@ -4,11 +4,20 @@ import { useResumeStore } from "@/app/lib/state/resumeStore";
 import { v4 as uuidv4 } from "uuid";
 import { useState } from "react";
 
+// ✅ Define proper type instead of `any`
+type Achievement = {
+  id: string;
+  title: string;
+  date: string;
+  description: string;
+  summary: string;
+};
+
 export default function Step5Achievements() {
   const { achievements, setAchievements } = useResumeStore();
   const [loadingId, setLoadingId] = useState<string | null>(null);
 
-  const handleChange = (id: string, key: string, value: string) => {
+  const handleChange = (id: string, key: keyof Achievement, value: string) => {
     const updated = achievements.map((ach) =>
       ach.id === id ? { ...ach, [key]: value } : ach
     );
@@ -16,23 +25,21 @@ export default function Step5Achievements() {
   };
 
   const addAchievement = () => {
-    setAchievements([
-      ...achievements,
-      {
-        id: uuidv4(),
-        title: "",
-        date: "",
-        description: "",
-        summary: "",
-      },
-    ]);
+    const newAch: Achievement = {
+      id: uuidv4(),
+      title: "",
+      date: "",
+      description: "",
+      summary: "",
+    };
+    setAchievements([...achievements, newAch]);
   };
 
   const removeAchievement = (id: string) => {
     setAchievements(achievements.filter((ach) => ach.id !== id));
   };
 
-  const generateSummary = async (ach: any) => {
+  const generateSummary = async (ach: Achievement) => {
     setLoadingId(ach.id);
     const response = await fetch("/api/summaryGeneration", {
       method: "POST",

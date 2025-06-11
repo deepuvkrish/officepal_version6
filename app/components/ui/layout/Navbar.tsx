@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { FaPersonWalkingArrowRight } from "react-icons/fa6";
-import { FcRules } from "react-icons/fc";
+// import { FcRules } from "react-icons/fc";
 import {
   LogOut,
   Settings,
