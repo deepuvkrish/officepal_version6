@@ -42,7 +42,7 @@ export default function Step5Certifications() {
   };
   const generateSummary = async (cert: Certification) => {
     setLoadingId(cert.id);
-    const response = await fetch("/api/certSummaryGeneration", {
+    const response = await fetch("/api/summaryGeneration", {
       method: "POST",
       body: JSON.stringify({
         input: `Generate a concise one-line summary for the following certificate:\nTitle: ${cert.title}\nTime period: ${cert.timeperiod}\nfrom: ${cert.fromDate}\nto: ${cert.toDate}\norganisation: ${cert.organisation}\n`,
