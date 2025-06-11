@@ -8,6 +8,10 @@
   --blueBackground: #fafdff;
   --text: #2c2c2c;
   --navyB: #18202d;
+  --logoGreen: #00ffba;
+  --feedback: #edf2f8;
+  --btnBg: ##18202d;
+  --btnHover: #343c4a;
 }
 
 @theme inline {
@@ -79,6 +83,39 @@ body {
   dark:hover:bg-gray-800 
   rounded-md;
 }
+.stckNav {
+  box-shadow: 1px 1px 12px #0000001a;
+  background: white;
+}
+.mainNav {
+  position: relative;
+  z-index: 5;
+}
+
+.mobNav {
+  background: #49556b;
+  border-radius: 0px 0px 20px 20px;
+  /* transition: 700ms; */
+  animation: 400ms linear dropdwn;
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes dropdwn {
+  0% {
+    transform: translateX(500px);
+  }
+  100% {
+    transform: translateX(0px);
+  }
+}
+
+.dronavmenu {
+  width: 99vw;
+  position: absolute;
+  left: 0;
+  background-color: white;
+}
 
 /* INPUT FIELDS */
 
@@ -87,17 +124,27 @@ body {
 }
 
 /* Buttons */
+.commonBtn {
+  border-radius: 3px;
+  font-size: 16px;
+  transition: 300ms;
+}
+
+.commonBtn:hover {
+  color: var(--logoGreen);
+}
 .signinbtn {
   background: var(--navyB);
   color: white;
   padding-inline: 10px;
+  border-radius: 3px;
 }
 
 /* Testimonial */
 .feedbackMenu {
   display: flex;
   flex-direction: column;
-  background: #edf2f8;
+  background: var(--feedback);
   padding-block: 5rem;
 }
 .outerdiv {

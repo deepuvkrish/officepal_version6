@@ -11,25 +11,25 @@ export default function Home() {
       {/* Background Illustration */}
       {/* <AnimatedBackground /> */}
 
-      <div className="relative z-10 max-w-xl">
+      <div className="relative z-10 max-w-[900px] pt-10">
         <Image
-          src="/logo/icon_black.png"
+          src="/logo/icon_black2.png"
           alt="Resume Icon"
           width={200}
           height={200}
           className="mx-auto mb-6"
         />
 
-        <h1 className="text-4xl font-bold mb-4">
-          Office Assist: Resume Creator
+        <h1 className="text-5xl font-bold mb-4">
+          Start Your Professional Career here with Us
         </h1>
-        <p className="text-lg text-muted-foreground mb-8">
-          Build your professional resume with ease. Simple. Clean. Smart.
+        <p className="text-2xl text-muted-foreground mb-8">
+          Create your professional writings with ease, Simple, Clean & Smart.
           Powered by AI.
         </p>
 
         <Link href="/resume/form">
-          <Button size="lg" className="text-base px-8 cursor-pointer">
+          <Button size="lg" className="text-base px-8 cursor-pointer commonBtn">
             Start Building Resume
           </Button>
         </Link>
@@ -37,7 +37,6 @@ export default function Home() {
       </div>
 
       <div className="flex flex-col w-full mt-[10rem]">
-        
         <Testimonial />
       </div>
     </main>
