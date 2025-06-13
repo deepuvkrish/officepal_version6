@@ -10,7 +10,7 @@ export default function Step2Skills() {
     removeSkill,
     addInterest,
     removeInterest,
-    setStep,
+    // setStep,
   } = useResumeStore();
 
   const [skillInput, setSkillInput] = useState("");
@@ -109,7 +109,7 @@ export default function Step2Skills() {
       </div>
 
       {/* Navigation */}
-      <div className="flex justify-between mt-8">
+      {/* <div className="flex justify-between mt-8">
         <button
           onClick={() => setStep(1)}
           className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
@@ -122,7 +122,7 @@ export default function Step2Skills() {
         >
           Next
         </button>
-      </div>
+      </div> */}
     </div>
   );
 }

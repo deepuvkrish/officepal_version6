@@ -10,8 +10,9 @@
   --navyB: #18202d;
   --logoGreen: #00ffba;
   --feedback: #edf2f8;
-  --btnBg: ##18202d;
+  --btnBg: #18202d;
   --btnHover: #343c4a;
+  --hoverGreen: #029f74;
 }
 
 @theme inline {
@@ -39,17 +40,19 @@ body {
   border-bottom: 1px solid var(--borderBlue);
   padding-bottom: 20px;
 }
-
 /* Forms */
 .stepForms {
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--lightWhite);
+  border: 1px solid var(--color-gray-200);
   padding: 20px;
   border-radius: 10px;
   min-height: 35rem;
   min-width: 100%;
-  background: rgb(62, 71, 75);
+  background: #fff;
+  box-shadow: 0.2rem 0.2rem 0.5rem rgba(128, 128, 128, 0.081),
+    inset -0.2rem -0.2rem 0.5rem white;
+  position: relative;
 }
 
 /* Landing Page ANimation */
@@ -77,12 +80,28 @@ body {
 
 /* NavBar */
 .dropdown-item {
-  @apply text-sm cursor-pointer 
+  @apply text-[16px] cursor-pointer 
   text-gray-800 
-  dark:text-white 
-  hover:bg-gray-100 
-  dark:hover:bg-gray-800 
-  rounded-md;
+  hover:text-[#029f74]
+  rounded-md
+  flex
+  items-center;
+}
+.dropdown-item-2 {
+  @apply text-[16px] cursor-pointer 
+  text-gray-800 
+  hover:text-red-800 
+  rounded-md
+  flex
+  items-center;
+}
+.dropdown-item-button {
+  background: var(--navyB);
+  font-size: 16px;
+  color: var(--logoGreen);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .stckNav {
   box-shadow: 1px 1px 12px #0000001a;
@@ -139,7 +158,6 @@ body {
   font-size: 16px;
   transition: 300ms;
 }
-
 .commonBtn:hover {
   color: var(--logoGreen);
 }
@@ -148,6 +166,43 @@ body {
   color: white;
   padding-inline: 10px;
   border-radius: 3px;
+}
+.savebutton {
+  background: #edf2f8;
+  transition: 700ms;
+  width: 100px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: #7a7a7a;
+  cursor: pointer;
+  position: absolute;
+  bottom: 20px;
+  left: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  border: 1px solid rgba(255, 255, 255, 0);
+}
+.clearbutton {
+  color: #7a7a7a;
+  cursor: pointer;
+  background: #edf2f8;
+  border-radius: 5px;
+  justify-content: space-around;
+  align-items: center;
+  width: 100px;
+  padding: 5px;
+  transition: all 0.7s;
+  display: flex;
+  position: absolute;
+  bottom: 20px;
+  border: 1px solid rgba(255, 255, 255, 0);
+}
+.savebutton:hover {
+  box-shadow: 0.1rem 0.1rem 0.5rem 0px #cccbcb, -0.1rem -0.1rem 0.5rem #ffffff;
+}
+.clearbutton:hover {
+  box-shadow: 0.1rem 0.1rem 0.5rem 0px #cccbcb, -0.1rem -0.1rem 0.5rem #ffffff;
 }
 
 /* Testimonial */
@@ -300,5 +355,20 @@ body {
   }
   .attribution {
     position: relative;
+  }
+}
+
+/* Skeleton ============================>*/
+
+.animate-pulse {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    filter: brightness(0.5);
+  }
+  100% {
+    filter: brightness(5);
   }
 }

@@ -6,7 +6,6 @@ import Image from "next/image";
 import { FaPersonWalkingArrowRight } from "react-icons/fa6";
 // import { FcRules } from "react-icons/fc";
 import {
-  LogOut,
   Settings,
   FileText,
   CreditCard,
@@ -31,6 +30,10 @@ import {
   FolderCode,
   BriefcaseBusiness,
   Hourglass,
+  LogOut,
+  BookMarked,
+  SquarePen,
+  TicketPercent,
 } from "lucide-react";
 import { useSession, signOut } from "next-auth/react";
 import SignIn from "@/app/components/SignIn";
@@ -130,48 +133,112 @@ export default function Navbar() {
         <div className="hidden sm:flex items-center gap-4">
           {isLoggedIn ? (
             <div className="relative" ref={dropdownRef}>
-              <button
+              {/* <button
                 onClick={() => setShowMenu(!showMenu)}
-                className="flex items-center gap-2 hover:bg-gray-200 p-2 rounded-md"
+                className="flex items-center gap-2  p-2 rounded-md cursor-pointer"
               >
                 {avatar}
-                <span className="hidden sm:inline text-sm">
+                <span className="hidden sm:inline text-[16px] font-bold">
                   {session?.user?.name?.split(" ")[0] ?? "My Account"}
                 </span>
                 <ChevronDown />
-              </button>
+              </button> */}
+
+              <div className="flex items-center gap-3 px-4 py-3">
+                <div className="relative aspect-square w-10 rounded-full">
+                  {avatar}
+                  <span className="absolute -right-0.5 -top-0.5 block h-3.5 w-3.5 rounded-full border-2 border-white bg-green-500 "></span>
+                </div>
+                <div>
+                  <p className="text-[16px] font-semibold text-dark text-dark-6">
+                    {session?.user?.name?.split(" ")[0] ?? "My Account"}
+                  </p>
+                  <p className="text-sm text-body-color dark:text-dark-6">
+                    {session?.user?.email?.split(" ")[0] ?? "My Account"}
+                  </p>
+                </div>
+                <ChevronDown onClick={() => setShowMenu(!showMenu)} />
+              </div>
 
               <div
-                className={`absolute right-0 mt-2 bg-white shadow-lg rounded-md w-48 border transition-all duration-200 origin-top transform ${
+                className={`absolute right-0 mt-2 bg-white shadow-lg rounded-md w-[300px] border transition-all duration-200 origin-top transform ${
                   showMenu
                     ? "scale-100 opacity-100 visible"
                     : "scale-95 opacity-0 invisible"
                 }`}
               >
+                <div className="px-4 py-3">
+                  <p className="text-[16px] font-semibold text-dark ">
+                    Account menu
+                  </p>
+                </div>
+                <div>
+                  <a
+                    href="#0"
+                    className="flex w-full items-center justify-between px-4 py-2.5 text-[16px] font-medium text-dark hover:bg-gray-500 hover:text-[#00ffba] "
+                  >
+                    View profile
+                  </a>
+                  <a
+                    href="#0"
+                    className="flex w-full items-center justify-between px-4 py-2.5 text-[16px] font-medium text-dark hover:bg-gray-500 hover:text-[#00ffba] "
+                  >
+                    Settings
+                  </a>
+                  <a
+                    href="#0"
+                    className="flex w-full items-center justify-between px-4 py-2.5 text-[16px] font-medium text-dark hover:bg-gray-500 hover:text-[#00ffba] "
+                  >
+                    Keyboard shortcuts
+                    <span className="text-xs text-dark-5"> ⌘K </span>
+                  </a>
+                </div>
+                <div>
+                  <a
+                    href="#0"
+                    className="flex w-full items-center justify-between px-4 py-2.5 text-[16px] font-medium text-dark hover:bg-gray-500 hover:text-[#00ffba] "
+                  >
+                    Company profile
+                  </a>
+                  <a
+                    href="#0"
+                    className="flex w-full items-center justify-between px-4 py-2.5 text-[16px] font-medium text-dark hover:bg-gray-500 hover:text-[#00ffba] "
+                  >
+                    Team
+                  </a>
+                  <a
+                    href="#0"
+                    className="flex w-full items-center justify-between px-4 py-2.5 text-[16px] font-medium text-dark hover:bg-gray-500 hover:text-[#00ffba] "
+                  >
+                    Invite colleagues
+                  </a>
+                </div>
+
                 <Link
                   href="/resumes/saved"
-                  className="dropdown-item flex items-center gap-2 px-4 py-2 hover:bg-gray-100"
+                  className="dropdown-item flex items-center gap-2 px-4 py-2 "
                 >
                   <FileText className="w-4 h-4" />
                   Saved Resumes
                 </Link>
                 <Link
                   href="/account/settings"
-                  className="dropdown-item flex items-center gap-2 px-4 py-2 hover:bg-gray-100"
+                  className="dropdown-item flex items-center gap-2 px-4 py-2 "
                 >
                   <Settings className="w-4 h-4" />
                   Edit Details
                 </Link>
                 <Link
                   href="/pricing"
-                  className="dropdown-item flex items-center gap-2 px-4 py-2 hover:bg-gray-100"
+                  className="dropdown-item flex items-center gap-2 px-4 py-2 "
                 >
                   <CreditCard className="w-4 h-4" />
                   Buy Plans
                 </Link>
+
                 <button
                   onClick={() => signOut()}
-                  className="dropdown-item text-red-500 flex items-center gap-2 px-4 py-2 hover:bg-red-100 w-full text-left"
+                  className="dropdown-item-2 flex items-center gap-2 px-4 py-2  w-full text-left "
                 >
                   <LogOut className="w-4 h-4" />
                   Logout
@@ -309,31 +376,45 @@ export default function Navbar() {
           {/* Auth Options */}
           {isLoggedIn ? (
             <>
+              <button
+                onClick={() => setShowMenu(!showMenu)}
+                className="flex items-center gap-2  p-2 rounded-md"
+              >
+                {avatar}
+                <span className="sm-hidden inline text-[17px] text-black">
+                  {session?.user?.name?.split(" ")[0] ?? "My Account"}
+                </span>
+              </button>
+
               <Link
                 href="/resumes/saved"
                 className="dropdown-item px-2 py-2 hover:bg-gray-100 rounded-md"
               >
+                <BookMarked size={18} className="mr-1" />
                 Saved Resumes
               </Link>
               <Link
                 href="/account/settings"
                 className="dropdown-item px-2 py-2 hover:bg-gray-100 rounded-md"
               >
+                <SquarePen size={18} className="mr-1" />
                 Edit Details
               </Link>
               <Link
                 href="/pricing"
                 className="dropdown-item px-2 py-2 hover:bg-gray-100 rounded-md"
               >
-                Buy Plans
+                <TicketPercent size={18} className="mr-1" />
+                Plans
               </Link>
               <button
                 onClick={() => {
                   signOut();
                   setShowMobileMenu(false);
                 }}
-                className="dropdown-item text-red-500 px-2 py-2 rounded-md hover:bg-red-100"
+                className="dropdown-item-button  px-2 py-2 rounded-md"
               >
+                <LogOut size={20} className="mr-2" />
                 Logout
               </button>
             </>
