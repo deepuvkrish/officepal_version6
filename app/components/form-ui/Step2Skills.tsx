@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useResumeStore } from "@/app/lib/state/resumeStore";
+import toast from "react-hot-toast";
+import { motion } from "framer-motion";
 
 export default function Step2Skills() {
   const {
@@ -10,44 +12,62 @@ export default function Step2Skills() {
     removeSkill,
     addInterest,
     removeInterest,
-    // setStep,
   } = useResumeStore();
 
   const [skillInput, setSkillInput] = useState("");
   const [interestInput, setInterestInput] = useState("");
 
   const handleAddSkill = () => {
-    if (skillInput.trim()) {
-      addSkill(skillInput.trim());
-      setSkillInput("");
+    const trimmed = skillInput.trim();
+    if (!trimmed) {
+      toast.error("Please enter a skill.");
+      return;
     }
+    if (skillsInterests.skills.includes(trimmed)) {
+      toast.error("This skill already exists.");
+      return;
+    }
+    addSkill(trimmed);
+    setSkillInput("");
   };
 
   const handleAddInterest = () => {
-    if (interestInput.trim()) {
-      addInterest(interestInput.trim());
-      setInterestInput("");
+    const trimmed = interestInput.trim();
+    if (!trimmed) {
+      toast.error("Please enter an interest or language.");
+      return;
     }
+    if (skillsInterests.interests.includes(trimmed)) {
+      toast.error("This entry already exists.");
+      return;
+    }
+    addInterest(trimmed);
+    setInterestInput("");
   };
 
   return (
-    <div className="max-w-xl mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4">Step 2: Skills & Interests</h2>
+    <div className="max-w-xl mx-auto p-4 space-y-8">
+      <h2 className="text-2xl font-bold">Step 2: Skills & Interests</h2>
 
-      {/* Skills Section */}
-      <div className="mb-6">
+      {/* Skills */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+      >
         <label className="block font-semibold mb-2">Add Skill</label>
         <div className="flex gap-2">
           <input
             type="text"
             value={skillInput}
             onChange={(e) => setSkillInput(e.target.value)}
-            className="border p-2 flex-1 rounded"
+            onKeyDown={(e) => e.key === "Enter" && handleAddSkill()}
+            className="input flex-1"
             placeholder="e.g. JavaScript"
           />
           <button
             onClick={handleAddSkill}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            className="btn bg-blue-600 text-white hover:bg-blue-700"
           >
             Add
           </button>
@@ -68,10 +88,14 @@ export default function Step2Skills() {
             </span>
           ))}
         </div>
-      </div>
+      </motion.div>
 
-      {/* Interests Section */}
-      <div className="mb-6">
+      {/* Interests */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+      >
         <label className="block font-semibold mb-2">
           Add Interest / Language
         </label>
@@ -80,12 +104,13 @@ export default function Step2Skills() {
             type="text"
             value={interestInput}
             onChange={(e) => setInterestInput(e.target.value)}
-            className="border p-2 flex-1 rounded"
+            onKeyDown={(e) => e.key === "Enter" && handleAddInterest()}
+            className="input flex-1"
             placeholder="e.g. English, Problem Solving"
           />
           <button
             onClick={handleAddInterest}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            className="btn bg-blue-600 text-white hover:bg-blue-700"
           >
             Add
           </button>
@@ -106,23 +131,7 @@ export default function Step2Skills() {
             </span>
           ))}
         </div>
-      </div>
-
-      {/* Navigation */}
-      {/* <div className="flex justify-between mt-8">
-        <button
-          onClick={() => setStep(1)}
-          className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
-        >
-          Back
-        </button>
-        <button
-          onClick={() => setStep(3)}
-          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-        >
-          Next
-        </button>
-      </div> */}
+      </motion.div>
     </div>
   );
 }

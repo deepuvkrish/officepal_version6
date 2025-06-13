@@ -18,9 +18,13 @@ export default function Step5Certifications() {
   const { certifications, setCertifications } = useResumeStore();
   const [loadingId, setLoadingId] = useState<string | null>(null);
 
-  const handleChange = (id: string, key: string, value: string) => {
-    const updated = certifications.map((ach) =>
-      ach.id === id ? { ...ach, [key]: value } : ach
+  const handleChange = (
+    id: string,
+    key: keyof Certification,
+    value: string
+  ) => {
+    const updated = certifications.map((cert) =>
+      cert.id === id ? { ...cert, [key]: value } : cert
     );
     setCertifications(updated);
   };
@@ -37,29 +41,38 @@ export default function Step5Certifications() {
     };
     setCertifications([...certifications, newCert]);
   };
+
   const removeCertification = (id: string) => {
     setCertifications(certifications.filter((cert) => cert.id !== id));
   };
+
   const generateSummary = async (cert: Certification) => {
     setLoadingId(cert.id);
-    const response = await fetch("/api/summaryGeneration", {
-      method: "POST",
-      body: JSON.stringify({
-        input: `Generate a concise one-line summary for the following certificate:\nTitle: ${cert.title}\nTime period: ${cert.timeperiod}\nfrom: ${cert.fromDate}\nto: ${cert.toDate}\norganisation: ${cert.organisation}\n`,
-      }),
-    });
+    try {
+      const response = await fetch("/api/summaryGeneration", {
+        method: "POST",
+        body: JSON.stringify({
+          input: `Generate a concise one-line summary for the following certificate:\nTitle: ${cert.title}\nTime period: ${cert.timeperiod}\nFrom: ${cert.fromDate}\nTo: ${cert.toDate}\nOrganisation: ${cert.organisation}`,
+        }),
+      });
 
-    const data = await response.json();
-    handleChange(
-      cert.id,
-      "summary",
-      data.output || "Summary generation failed."
-    );
-    setLoadingId(null);
+      const data = await response.json();
+      handleChange(
+        cert.id,
+        "summary",
+        data.output || "Summary generation failed."
+      );
+    } catch (error) {
+      console.error("Summary generation failed:", error);
+      handleChange(cert.id, "summary", "Summary generation failed.");
+    } finally {
+      setLoadingId(null);
+    }
   };
+
   return (
     <div className="space-y-6 mt-8">
-      <h2 className="text-xl font-bold">certifications</h2>
+      <h2 className="text-xl font-bold">Certifications</h2>
       {certifications.map((cert) => (
         <div key={cert.id} className="border p-4 rounded space-y-2">
           <input
@@ -73,30 +86,34 @@ export default function Step5Certifications() {
             type="text"
             placeholder="Time Period"
             value={cert.timeperiod}
-            onChange={(e) => handleChange(cert.id, "title", e.target.value)}
+            onChange={(e) =>
+              handleChange(cert.id, "timeperiod", e.target.value)
+            }
             className="w-full border p-2"
           />
-          <div className="flex justify-between items-center">
+          <div className="flex gap-2">
             <input
               type="text"
               placeholder="From Date"
               value={cert.fromDate}
-              onChange={(e) => handleChange(cert.id, "date", e.target.value)}
+              onChange={(e) =>
+                handleChange(cert.id, "fromDate", e.target.value)
+              }
               className="w-full border p-2"
             />
             <input
               type="text"
               placeholder="To Date"
               value={cert.toDate}
-              onChange={(e) => handleChange(cert.id, "date", e.target.value)}
+              onChange={(e) => handleChange(cert.id, "toDate", e.target.value)}
               className="w-full border p-2"
             />
           </div>
           <textarea
-            placeholder="Source"
+            placeholder="Organisation"
             value={cert.organisation}
             onChange={(e) =>
-              handleChange(cert.id, "description", e.target.value)
+              handleChange(cert.id, "organisation", e.target.value)
             }
             className="w-full border p-2"
           />
@@ -106,20 +123,22 @@ export default function Step5Certifications() {
             onChange={(e) => handleChange(cert.id, "summary", e.target.value)}
             className="w-full border p-2"
           />
-          <button
-            onClick={() => generateSummary(cert)}
-            className="text-sm bg-green-500 text-white px-3 py-1 rounded"
-            disabled={loadingId === cert.id}
-          >
-            {loadingId === cert.id ? "Generating..." : "Generate Summary"}
-          </button>
-          <button
-            type="button"
-            onClick={() => removeCertification(cert.id)}
-            className="text-red-500 ml-3"
-          >
-            Remove
-          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={() => generateSummary(cert)}
+              className="text-sm bg-green-500 text-white px-3 py-1 rounded"
+              disabled={loadingId === cert.id}
+            >
+              {loadingId === cert.id ? "Generating..." : "Generate Summary"}
+            </button>
+            <button
+              type="button"
+              onClick={() => removeCertification(cert.id)}
+              className="text-red-500 text-sm"
+            >
+              Remove
+            </button>
+          </div>
         </div>
       ))}
       <button
