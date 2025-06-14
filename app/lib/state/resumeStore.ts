@@ -75,6 +75,8 @@ type ResumeData = {
   education: Education[];
   certifications: Certification[];
   achievements: Achievement[];
+  selectedTheme: string;
+  setSelectedTheme: (theme: string) => void;
 
   setStep: (step: number) => void;
   updatePersonal: (data: PersonalInfo) => void;
@@ -113,6 +115,7 @@ export const useResumeStore = create<ResumeData>((set) => ({
   education: [],
   certifications: [],
   achievements: [],
+  selectedTheme: "classic", // default theme
 
   setStep: (step) => set({ step }),
   updatePersonal: (data) => set({ personal: data }),
@@ -157,10 +160,12 @@ export const useResumeStore = create<ResumeData>((set) => ({
         },
       };
     }),
+    
 
   setProjects: (projects) => set({ projects }),
   setExperiences: (experiences) => set({ experiences }),
   setEducation: (education) => set({ education }),
   setCertifications: (certifications) => set({ certifications }),
   setAchievements: (achievements) => set({ achievements }),
+  setSelectedTheme: (theme) => set({ selectedTheme: theme }),
 }));
