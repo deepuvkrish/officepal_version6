@@ -46,7 +46,7 @@ export default function Step2Skills() {
   };
 
   return (
-    <div className="max-w-xl mx-auto p-4 space-y-8">
+    <div className="max-w-xl mx-auto p-4 space-y-8 stepForms">
       <h2 className="text-2xl font-bold">Step 2: Skills & Interests</h2>
 
       {/* Skills */}
@@ -65,10 +65,7 @@ export default function Step2Skills() {
             className="input flex-1"
             placeholder="e.g. JavaScript"
           />
-          <button
-            onClick={handleAddSkill}
-            className="btn bg-blue-600 text-white hover:bg-blue-700"
-          >
+          <button onClick={handleAddSkill} className="addButton">
             Add
           </button>
         </div>
@@ -108,10 +105,7 @@ export default function Step2Skills() {
             className="input flex-1"
             placeholder="e.g. English, Problem Solving"
           />
-          <button
-            onClick={handleAddInterest}
-            className="btn bg-blue-600 text-white hover:bg-blue-700"
-          >
+          <button onClick={handleAddInterest} className="addButton">
             Add
           </button>
         </div>

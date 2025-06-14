@@ -58,6 +58,7 @@ type Certification = {
 };
 
 type Achievement = {
+  isSaved: boolean;
   id: string;
   title: string;
   date: string;
