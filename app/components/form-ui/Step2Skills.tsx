@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useResumeStore } from "@/app/lib/state/resumeStore";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
+import { CheckCircle } from "lucide-react";
 
 export default function Step2Skills() {
   const {
@@ -12,6 +13,8 @@ export default function Step2Skills() {
     removeSkill,
     addInterest,
     removeInterest,
+    isSavedSkillsInterests,
+    setIsSavedSkillsInterests,
   } = useResumeStore();
 
   const [skillInput, setSkillInput] = useState("");
@@ -19,37 +22,54 @@ export default function Step2Skills() {
 
   const handleAddSkill = () => {
     const trimmed = skillInput.trim();
-    if (!trimmed) {
-      toast.error("Please enter a skill.");
-      return;
-    }
-    if (skillsInterests.skills.includes(trimmed)) {
-      toast.error("This skill already exists.");
-      return;
-    }
+    if (!trimmed) return toast.error("Please enter a skill.");
+    if (skillsInterests.skills.includes(trimmed))
+      return toast.error("This skill already exists.");
     addSkill(trimmed);
     setSkillInput("");
+    setIsSavedSkillsInterests(false);
+    if (isSavedSkillsInterests) {
+      console.log("skills entered");
+    }
   };
 
   const handleAddInterest = () => {
     const trimmed = interestInput.trim();
-    if (!trimmed) {
-      toast.error("Please enter an interest or language.");
-      return;
-    }
-    if (skillsInterests.interests.includes(trimmed)) {
-      toast.error("This entry already exists.");
-      return;
-    }
+    if (!trimmed) return toast.error("Please enter an interest or language.");
+    if (skillsInterests.interests.includes(trimmed))
+      return toast.error("This entry already exists.");
     addInterest(trimmed);
     setInterestInput("");
+    setIsSavedSkillsInterests(false);
+  };
+
+  const handleKeyPress = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    handler: () => void
+  ) => {
+    if (e.key === "Enter" || e.key === ",") {
+      e.preventDefault();
+      handler();
+    }
+  };
+
+  const handleSave = () => {
+    if (
+      skillsInterests.skills.length === 0 &&
+      skillsInterests.interests.length === 0
+    ) {
+      toast.error("Please add at least one skill or interest.");
+      return;
+    }
+    setIsSavedSkillsInterests(true);
+    toast.success("Skills and Interests saved!");
   };
 
   return (
     <div className="max-w-xl mx-auto p-4 space-y-8 stepForms">
       <h2 className="text-2xl font-bold">Step 2: Skills & Interests</h2>
 
-      {/* Skills */}
+      {/* Skills Section */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -61,7 +81,7 @@ export default function Step2Skills() {
             type="text"
             value={skillInput}
             onChange={(e) => setSkillInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleAddSkill()}
+            onKeyDown={(e) => handleKeyPress(e, handleAddSkill)}
             className="input flex-1"
             placeholder="e.g. JavaScript"
           />
@@ -78,7 +98,10 @@ export default function Step2Skills() {
               {skill}
               <button
                 className="text-red-600 hover:text-red-800"
-                onClick={() => removeSkill(index)}
+                onClick={() => {
+                  removeSkill(index);
+                  setIsSavedSkillsInterests(false);
+                }}
               >
                 ×
               </button>
@@ -87,7 +110,7 @@ export default function Step2Skills() {
         </div>
       </motion.div>
 
-      {/* Interests */}
+      {/* Interests Section */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -101,7 +124,7 @@ export default function Step2Skills() {
             type="text"
             value={interestInput}
             onChange={(e) => setInterestInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleAddInterest()}
+            onKeyDown={(e) => handleKeyPress(e, handleAddInterest)}
             className="input flex-1"
             placeholder="e.g. English, Problem Solving"
           />
@@ -118,7 +141,10 @@ export default function Step2Skills() {
               {interest}
               <button
                 className="text-red-600 hover:text-red-800"
-                onClick={() => removeInterest(index)}
+                onClick={() => {
+                  removeInterest(index);
+                  setIsSavedSkillsInterests(false);
+                }}
               >
                 ×
               </button>
@@ -126,6 +152,17 @@ export default function Step2Skills() {
           ))}
         </div>
       </motion.div>
+
+      {/* Save Button */}
+      <div className="pt-4">
+        <button
+          onClick={handleSave}
+          className="saveButton flex items-center gap-2 text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded"
+        >
+          <CheckCircle size={18} />
+          Save Skills & Interests
+        </button>
+      </div>
     </div>
   );
 }

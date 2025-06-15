@@ -1,4 +1,7 @@
-import { create } from 'zustand';
+// ./app/lib/state/resumeStore.ts
+
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 type PersonalInfo = {
   fullName: string;
@@ -76,6 +79,8 @@ type ResumeData = {
   certifications: Certification[];
   achievements: Achievement[];
   selectedTheme: string;
+  isSavedSkillsInterests: boolean;
+  setIsSavedSkillsInterests: (value: boolean) => void;
   setSelectedTheme: (theme: string) => void;
 
   setStep: (step: number) => void;
@@ -95,77 +100,98 @@ type ResumeData = {
   setAchievements: (achievements: Achievement[]) => void;
 };
 
-export const useResumeStore = create<ResumeData>((set) => ({
-  step: 1,
-  personal: {
-    fullName: '',
-    dob: '',
-    email: '',
-    phone: '',
-    address: '',
-    linkedin: '',
-    portfolio: '',
-  },
-  skillsInterests: {
-    skills: [],
-    interests: [],
-  },
-  projects: [],
-  experiences: [],
-  education: [],
-  certifications: [],
-  achievements: [],
-  selectedTheme: "classic", // default theme
-
-  setStep: (step) => set({ step }),
-  updatePersonal: (data) => set({ personal: data }),
-  updateSkillsInterests: (data) => set({ skillsInterests: data }),
-
-  addSkill: (skill) =>
-    set((state) => ({
-      skillsInterests: {
-        ...state.skillsInterests,
-        skills: [...state.skillsInterests.skills, skill],
+export const useResumeStore = create<ResumeData>()(
+  persist(
+    (set) => ({
+      step: 1,
+      personal: {
+        fullName: "",
+        dob: "",
+        email: "",
+        phone: "",
+        address: "",
+        linkedin: "",
+        portfolio: "",
       },
-    })),
-
-  removeSkill: (index) =>
-    set((state) => {
-      const updated = [...state.skillsInterests.skills];
-      updated.splice(index, 1);
-      return {
-        skillsInterests: {
-          ...state.skillsInterests,
-          skills: updated,
-        },
-      };
-    }),
-
-  addInterest: (interest) =>
-    set((state) => ({
       skillsInterests: {
-        ...state.skillsInterests,
-        interests: [...state.skillsInterests.interests, interest],
+        skills: [],
+        interests: [],
       },
-    })),
+      projects: [],
+      experiences: [],
+      education: [],
+      certifications: [],
+      achievements: [],
+      selectedTheme: "classic",
 
-  removeInterest: (index) =>
-    set((state) => {
-      const updated = [...state.skillsInterests.interests];
-      updated.splice(index, 1);
-      return {
-        skillsInterests: {
-          ...state.skillsInterests,
-          interests: updated,
-        },
-      };
+      isSavedSkillsInterests: false,
+      setIsSavedSkillsInterests: (value) => set({ isSavedSkillsInterests: value }),
+      setSelectedTheme: (theme) => set({ selectedTheme: theme }),
+
+      setStep: (step) => set({ step }),
+      updatePersonal: (data) => set({ personal: data }),
+      updateSkillsInterests: (data) => set({ skillsInterests: data }),
+
+      addSkill: (skill) =>
+        set((state) => ({
+          skillsInterests: {
+            ...state.skillsInterests,
+            skills: [...state.skillsInterests.skills, skill],
+          },
+        })),
+
+      removeSkill: (index) =>
+        set((state) => {
+          const updated = [...state.skillsInterests.skills];
+          updated.splice(index, 1);
+          return {
+            skillsInterests: {
+              ...state.skillsInterests,
+              skills: updated,
+            },
+          };
+        }),
+
+      addInterest: (interest) =>
+        set((state) => ({
+          skillsInterests: {
+            ...state.skillsInterests,
+            interests: [...state.skillsInterests.interests, interest],
+          },
+        })),
+
+      removeInterest: (index) =>
+        set((state) => {
+          const updated = [...state.skillsInterests.interests];
+          updated.splice(index, 1);
+          return {
+            skillsInterests: {
+              ...state.skillsInterests,
+              interests: updated,
+            },
+          };
+        }),
+
+      setProjects: (projects) => set({ projects }),
+      setExperiences: (experiences) => set({ experiences }),
+      setEducation: (education) => set({ education }),
+      setCertifications: (certifications) => set({ certifications }),
+      setAchievements: (achievements) => set({ achievements }),
     }),
-    
-
-  setProjects: (projects) => set({ projects }),
-  setExperiences: (experiences) => set({ experiences }),
-  setEducation: (education) => set({ education }),
-  setCertifications: (certifications) => set({ certifications }),
-  setAchievements: (achievements) => set({ achievements }),
-  setSelectedTheme: (theme) => set({ selectedTheme: theme }),
-}));
+    {
+      name: "resume-storage", // key in localStorage
+      partialize: (state) => ({
+        // Only store what you want to persist
+        personal: state.personal,
+        skillsInterests: state.skillsInterests,
+        projects: state.projects,
+        experiences: state.experiences,
+        education: state.education,
+        certifications: state.certifications,
+        achievements: state.achievements,
+        selectedTheme: state.selectedTheme,
+        isSavedSkillsInterests: state.isSavedSkillsInterests,
+      }),
+    }
+  )
+);
