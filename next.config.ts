@@ -18,25 +18,3 @@ const nextConfig: NextConfig = {
 
 
 export default nextConfig
-
-// // next.config.js
-// /** @type {import('next').NextConfig} */
-// module.exports = {
-//   reactStrictMode: true,
-//   images: {
-//     remotePatterns: [
-//       {
-//         protocol: "https",
-//         hostname: "lh3.googleusercontent.com",
-//       },
-//     ],
-//   },
-//   experimental: {
-//     serverActions: {
-//       // optional: increase body size if needed (only valid shape)
-//       bodySizeLimit: "2mb"
-//     },
-//   },
-// }
-
-

@@ -6,10 +6,10 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
-  },
+    "lint": "next lint",
+    "vercel-build": "ts-node --project tsconfig.json next.config.ts && next build"
 
-  
+  },
   "dependencies": {
     "@google/genai": "^1.4.0",
     "chrome-aws-lambda": "^10.1.0",
@@ -18,7 +18,7 @@
     "lucide-react": "^0.513.0",
     "next": "15.3.3",
     "next-auth": "^5.0.0-beta.28",
-    "puppeteer-core": "^10.4.0",
+    "puppeteer-core": "^24.10.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hot-toast": "^2.5.2",

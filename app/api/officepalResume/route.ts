@@ -1,20 +1,21 @@
 // ./app/api/officepalResume/route.ts
-
+// ./app/api/cvGenerate/route.ts
 import { NextRequest, NextResponse } from "next/server";
 
-export const runtime = "nodejs"; // ✅ Prevent Vercel Edge Runtime
+export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {
   try {
     const { html } = await req.json();
     const isProd = process.env.NODE_ENV === "production";
 
-    let puppeteer: typeof import("puppeteer-core");;
-    let browser: import("puppeteer-core").Browser;;
+    // Do not predeclare browser type here
+    let browser: import("puppeteer-core").Browser | import("puppeteer").Browser;
+
 
     if (isProd) {
       const chrome = (await import("chrome-aws-lambda")).default;
-      puppeteer = (await import("puppeteer-core")).default;
+      const puppeteer = (await import("puppeteer-core")).default;
 
       browser = await puppeteer.launch({
         args: chrome.args,
@@ -23,13 +24,11 @@ export async function POST(req: NextRequest) {
         defaultViewport: chrome.defaultViewport,
       });
     } else {
-      const localPuppeteer = await import("puppeteer");
-      puppeteer = localPuppeteer as unknown as typeof import("puppeteer-core");
+      const puppeteer = (await import("puppeteer")).default;
 
       browser = await puppeteer.launch({
         headless: true,
         args: ["--no-sandbox", "--disable-setuid-sandbox"],
-        // executablePath: "/usr/bin/google-chrome", // Uncomment if needed
       });
     }
 
@@ -37,7 +36,7 @@ export async function POST(req: NextRequest) {
     await page.setContent(html, { waitUntil: "networkidle0" });
 
     const pdfBuffer = await page.pdf({
-      format: "a4", // ✅ lowercase
+      format: "a4",
       printBackground: true,
       margin: { top: "40px", bottom: "60px", left: "20px", right: "20px" },
       displayHeaderFooter: true,
@@ -54,13 +53,8 @@ export async function POST(req: NextRequest) {
         "Content-Disposition": "attachment; filename=resume.pdf",
       },
     });
-  }  catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error("PDF generation error:", error.message, error.stack);
-    } else {
-      console.error("PDF generation error:", error);
-    }
-  
+  } catch (error: unknown) {
+    console.error("PDF generation error:", error);
     return NextResponse.json({ error: "Failed to generate PDF" }, { status: 500 });
   }
 }
