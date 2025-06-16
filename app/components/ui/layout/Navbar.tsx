@@ -133,17 +133,6 @@ export default function Navbar() {
         <div className="hidden sm:flex items-center gap-4">
           {isLoggedIn ? (
             <div className="relative" ref={dropdownRef}>
-              {/* <button
-                onClick={() => setShowMenu(!showMenu)}
-                className="flex items-center gap-2  p-2 rounded-md cursor-pointer"
-              >
-                {avatar}
-                <span className="hidden sm:inline text-[16px] font-bold">
-                  {session?.user?.name?.split(" ")[0] ?? "My Account"}
-                </span>
-                <ChevronDown />
-              </button> */}
-
               <div className="flex items-center gap-3 px-4 py-3">
                 <div className="relative aspect-square w-10 rounded-full">
                   {avatar}
@@ -157,7 +146,10 @@ export default function Navbar() {
                     {session?.user?.email?.split(" ")[0] ?? "My Account"}
                   </p>
                 </div>
-                <ChevronDown onClick={() => setShowMenu(!showMenu)} />
+                <ChevronDown
+                  onClick={() => setShowMenu(!showMenu)}
+                  className="cursor-pointer"
+                />
               </div>
 
               <div
@@ -173,12 +165,12 @@ export default function Navbar() {
                   </p>
                 </div>
                 <div>
-                  <a
-                    href="#0"
+                  <Link
+                    href="../pages/profile"
                     className="flex w-full items-center justify-between px-4 py-2.5 text-[16px] font-medium text-dark hover:bg-gray-500 hover:text-[#00ffba] "
                   >
                     View profile
-                  </a>
+                  </Link>
                   <a
                     href="#0"
                     className="flex w-full items-center justify-between px-4 py-2.5 text-[16px] font-medium text-dark hover:bg-gray-500 hover:text-[#00ffba] "
@@ -194,12 +186,6 @@ export default function Navbar() {
                   </a>
                 </div>
                 <div>
-                  <a
-                    href="#0"
-                    className="flex w-full items-center justify-between px-4 py-2.5 text-[16px] font-medium text-dark hover:bg-gray-500 hover:text-[#00ffba] "
-                  >
-                    Company profile
-                  </a>
                   <a
                     href="#0"
                     className="flex w-full items-center justify-between px-4 py-2.5 text-[16px] font-medium text-dark hover:bg-gray-500 hover:text-[#00ffba] "

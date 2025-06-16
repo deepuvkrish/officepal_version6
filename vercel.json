@@ -1,0 +1,10 @@
+{
+    "functions": {
+      "api/cvGenerate/route.ts": {
+        "runtime": "nodejs18.x",
+        "maxDuration": 15,
+        "memory": 1024
+      }
+    }
+  }
+  

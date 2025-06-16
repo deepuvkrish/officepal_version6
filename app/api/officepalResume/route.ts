@@ -1,13 +1,16 @@
-//  ./app/api/download/route.ts
+// ./app/api/cvGenerate/route.ts
+
 import { NextRequest, NextResponse } from "next/server";
+
+export const runtime = "nodejs"; // ✅ Prevent Vercel Edge Runtime
 
 export async function POST(req: NextRequest) {
   try {
     const { html } = await req.json();
     const isProd = process.env.NODE_ENV === "production";
 
-    let puppeteer;
-    let browser;
+    let puppeteer: typeof import("puppeteer-core");;
+    let browser: import("puppeteer-core").Browser;;
 
     if (isProd) {
       const chrome = (await import("chrome-aws-lambda")).default;
@@ -16,15 +19,17 @@ export async function POST(req: NextRequest) {
       browser = await puppeteer.launch({
         args: chrome.args,
         executablePath: (await chrome.executablePath) || "/usr/bin/chromium-browser",
-        headless: true,
+        headless: chrome.headless,
+        defaultViewport: chrome.defaultViewport,
       });
     } else {
-      puppeteer = (await import("puppeteer")).default;
+      const localPuppeteer = await import("puppeteer");
+      puppeteer = localPuppeteer as unknown as typeof import("puppeteer-core");
 
       browser = await puppeteer.launch({
         headless: true,
-        // You can specify executablePath here if your system doesn't pick up Chromium automatically
-        // executablePath: "/usr/bin/google-chrome"
+        args: ["--no-sandbox", "--disable-setuid-sandbox"],
+        // executablePath: "/usr/bin/google-chrome", // Uncomment if needed
       });
     }
 
@@ -32,7 +37,7 @@ export async function POST(req: NextRequest) {
     await page.setContent(html, { waitUntil: "networkidle0" });
 
     const pdfBuffer = await page.pdf({
-      format: "A4",
+      format: "a4", // ✅ lowercase
       printBackground: true,
       margin: { top: "40px", bottom: "60px", left: "20px", right: "20px" },
       displayHeaderFooter: true,
@@ -49,8 +54,13 @@ export async function POST(req: NextRequest) {
         "Content-Disposition": "attachment; filename=resume.pdf",
       },
     });
-  } catch (error) {
-    console.error("PDF generation error:", error);
+  }  catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("PDF generation error:", error.message, error.stack);
+    } else {
+      console.error("PDF generation error:", error);
+    }
+  
     return NextResponse.json({ error: "Failed to generate PDF" }, { status: 500 });
   }
 }
