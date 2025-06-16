@@ -19,14 +19,10 @@
 
 // export default nextConfig
 
+// next.config.js
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+module.exports = {
   reactStrictMode: true,
-  experimental: {
-    serverActions: {
-      bodySizeLimit: "2mb",
-    },
-  },
   images: {
     remotePatterns: [
       {
@@ -35,8 +31,12 @@ const nextConfig = {
       },
     ],
   },
-};
-
-module.exports = nextConfig;
+  experimental: {
+    serverActions: {
+      // optional: increase body size if needed (only valid shape)
+      bodySizeLimit: "2mb"
+    },
+  },
+}
 
 
