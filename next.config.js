@@ -23,7 +23,9 @@
 const nextConfig = {
   reactStrictMode: true,
   experimental: {
-    serverActions: true,
+    serverActions: {
+      bodySizeLimit: "2mb",
+    },
   },
   images: {
     remotePatterns: [
@@ -36,4 +38,5 @@ const nextConfig = {
 };
 
 module.exports = nextConfig;
+
 

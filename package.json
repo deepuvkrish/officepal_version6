@@ -6,8 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "vercel-build": "ts-node --project tsconfig.json next.config.ts && next build"
+    "lint": "next lint"
   },
 
   
