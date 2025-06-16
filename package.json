@@ -6,8 +6,11 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "vercel-build": "ts-node --project tsconfig.json next.config.ts && next build"
   },
+
+  
   "dependencies": {
     "@google/genai": "^1.4.0",
     "chrome-aws-lambda": "^10.1.0",
@@ -35,6 +38,7 @@
     "eslint-config-next": "15.3.3",
     "puppeteer": "^24.10.1",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
   }
 }
