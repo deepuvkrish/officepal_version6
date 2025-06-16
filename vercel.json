@@ -1,6 +1,6 @@
 {
     "functions": {
-      "api/cvGenerate/route.ts": {
+      "api/officepalResume/route.ts": {
         "runtime": "nodejs18.x",
         "maxDuration": 15,
         "memory": 1024
