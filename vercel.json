@@ -1,10 +1,6 @@
 {
-    "functions": {
-      "api/officepalResume/route.ts": {
-        "runtime": "nodejs18.x",
-        "maxDuration": 15,
-        "memory": 1024
-      }
-    }
-  }
-  
+  "version": 2,
+  "builds": [
+    { "src": "next.config.js", "use": "@vercel/next" }
+  ]
+}

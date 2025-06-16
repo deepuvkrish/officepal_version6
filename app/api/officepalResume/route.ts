@@ -1,4 +1,4 @@
-// ./app/api/cvGenerate/route.ts
+// ./app/api/officepalResume/route.ts
 
 import { NextRequest, NextResponse } from "next/server";
 
